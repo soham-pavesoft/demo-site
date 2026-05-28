@@ -16,48 +16,29 @@ export default async function Nav() {
   ])
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center">
-            <div className="h-full">
-              <SideMenu regions={regions} locales={locales} currentLocale={currentLocale} />
-            </div>
+    <div className="sticky top-0 inset-x-0 z-50">
+      <header className="h-14 bg-white border-b border-grey-10">
+        <nav className="content-container flex items-center justify-between h-full">
+          <LocalizedClientLink href="/" className="text-lg font-bold text-black tracking-tight">
+            Demo Site
+          </LocalizedClientLink>
+
+          <div className="hidden small:flex items-center gap-x-8 text-sm text-grey-60">
+            <LocalizedClientLink href="/store" className="hover:text-black transition-colors">Shop</LocalizedClientLink>
+            <LocalizedClientLink href="/account" className="hover:text-black transition-colors">Account</LocalizedClientLink>
           </div>
 
-          <div className="flex items-center h-full">
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
-              data-testid="nav-store-link"
-            >
-              Medusa Store
-            </LocalizedClientLink>
-          </div>
-
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden small:flex items-center gap-x-6 h-full">
-              <LocalizedClientLink
-                className="hover:text-ui-fg-base"
-                href="/account"
-                data-testid="nav-account-link"
-              >
-                Account
-              </LocalizedClientLink>
-            </div>
+          <div className="flex items-center gap-x-4">
             <Suspense
               fallback={
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
-                  href="/cart"
-                  data-testid="nav-cart-link"
-                >
-                  Cart (0)
-                </LocalizedClientLink>
+                <LocalizedClientLink className="text-sm text-grey-60" href="/cart">Cart (0)</LocalizedClientLink>
               }
             >
               <CartButton />
             </Suspense>
+            <div className="small:hidden">
+              <SideMenu regions={regions} locales={locales} currentLocale={currentLocale} />
+            </div>
           </div>
         </nav>
       </header>
