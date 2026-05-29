@@ -1,29 +1,43 @@
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+
 const steps = [
-  { num: "1", title: "Browse & Choose", description: "Explore our curated collection and find what works for you." },
-  { num: "2", title: "Personalize", description: "Tell us about your goals so we can tailor recommendations." },
-  { num: "3", title: "Delivered to You", description: "Get your products shipped fast with our satisfaction guarantee." },
+  "Choose the area of wellness and the product you want",
+  "Complete a quick onboarding questionnaire",
+  "Submit your order. See our guarantee.",
 ]
 
 const HowItWorks = () => {
   return (
-    <section className="bg-cream py-16 small:py-24">
-      <div className="content-container">
-        <h2 className="text-3xl font-bold text-grey-90 text-center mb-4">
-          How It Works
-        </h2>
-        <p className="text-grey-50 text-center mb-12">
-          Exactly how you need it to work for you.
-        </p>
-        <div className="grid grid-cols-1 small:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          {steps.map((step) => (
-            <div key={step.num} className="text-center">
-              <div className="w-14 h-14 rounded-full bg-brand-600 text-white text-xl font-bold flex items-center justify-center mx-auto mb-4">
-                {step.num}
+    <section className="py-20 bg-cream">
+      <div className="content-container flex flex-col small:flex-row items-start gap-16">
+        {/* Left heading */}
+        <div className="w-full small:w-1/3">
+          <h2 className="text-3xl small:text-4xl font-bold text-grey-90 leading-tight">
+            How does<br />Acme Wellness work?
+          </h2>
+          <p className="text-grey-60 mt-4">Exactly how you need it to work for you.</p>
+        </div>
+
+        {/* Right steps */}
+        <div className="w-full small:w-2/3">
+          <div className="space-y-8">
+            {steps.map((step, i) => (
+              <div key={i} className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full border-2 border-coral flex items-center justify-center flex-shrink-0">
+                  <span className="text-coral font-bold">{i + 1}</span>
+                </div>
+                <p className="text-grey-90 text-lg pt-1.5">{step}</p>
               </div>
-              <h3 className="text-lg font-semibold text-grey-90 mb-2">{step.title}</h3>
-              <p className="text-sm text-grey-50">{step.description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div className="mt-10">
+            <LocalizedClientLink
+              href="/store"
+              className="inline-block bg-deep-purple text-white px-8 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              Start an Order
+            </LocalizedClientLink>
+          </div>
         </div>
       </div>
     </section>

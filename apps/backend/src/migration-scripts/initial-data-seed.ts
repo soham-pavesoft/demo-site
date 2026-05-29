@@ -302,19 +302,18 @@ export default async function initial_data_seed({
     input: {
       product_categories: [
         {
-          name: "Shirts",
+          name: "Skin & Beauty",
+          handle: "skin-beauty",
           is_active: true,
         },
         {
-          name: "Sweatshirts",
+          name: "Vitality & Energy",
+          handle: "vitality-energy",
           is_active: true,
         },
         {
-          name: "Pants",
-          is_active: true,
-        },
-        {
-          name: "Merch",
+          name: "Longevity & Wellness",
+          handle: "longevity-wellness",
           is_active: true,
         },
       ],
@@ -324,495 +323,305 @@ export default async function initial_data_seed({
   await createProductsWorkflow(container).run({
     input: {
       products: [
+        // Skin & Beauty
         {
-          title: "Medusa T-Shirt",
+          title: "Hyaluronic Acid Serum",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Shirts")!.id,
+            categoryResult.find((cat) => cat.name === "Skin & Beauty")!.id,
           ],
-          description:
-            "Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.",
-          handle: "t-shirt",
-          weight: 400,
+          description: "Deep hydration serum for plump, glowing skin.",
+          handle: "hyaluronic-acid-serum",
+          weight: 100,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
-          images: [
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-back.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-back.png",
-            },
-          ],
-          options: [
-            {
-              title: "Size",
-              values: ["S", "M", "L", "XL"],
-            },
-            {
-              title: "Color",
-              values: ["Black", "White"],
-            },
-          ],
+          options: [{ title: "Size", values: ["30ml", "50ml"] }],
           variants: [
             {
-              title: "S / Black",
-              sku: "SHIRT-S-BLACK",
-              options: {
-                Size: "S",
-                Color: "Black",
-              },
+              title: "30ml",
+              sku: "HA-SERUM-30",
+              options: { Size: "30ml" },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
+                { amount: 2999, currency_code: "eur" },
+                { amount: 3499, currency_code: "usd" },
               ],
             },
             {
-              title: "S / White",
-              sku: "SHIRT-S-WHITE",
-              options: {
-                Size: "S",
-                Color: "White",
-              },
+              title: "50ml",
+              sku: "HA-SERUM-50",
+              options: { Size: "50ml" },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M / Black",
-              sku: "SHIRT-M-BLACK",
-              options: {
-                Size: "M",
-                Color: "Black",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M / White",
-              sku: "SHIRT-M-WHITE",
-              options: {
-                Size: "M",
-                Color: "White",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L / Black",
-              sku: "SHIRT-L-BLACK",
-              options: {
-                Size: "L",
-                Color: "Black",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L / White",
-              sku: "SHIRT-L-WHITE",
-              options: {
-                Size: "L",
-                Color: "White",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL / Black",
-              sku: "SHIRT-XL-BLACK",
-              options: {
-                Size: "XL",
-                Color: "Black",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL / White",
-              sku: "SHIRT-XL-WHITE",
-              options: {
-                Size: "XL",
-                Color: "White",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
+                { amount: 4499, currency_code: "eur" },
+                { amount: 4999, currency_code: "usd" },
               ],
             },
           ],
-          sales_channels: [
-            {
-              id: defaultSalesChannel.id,
-            },
-          ],
+          sales_channels: [{ id: defaultSalesChannel.id }],
         },
         {
-          title: "Medusa Sweatshirt",
+          title: "Retinol Night Cream",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Sweatshirts")!.id,
+            categoryResult.find((cat) => cat.name === "Skin & Beauty")!.id,
           ],
-          description:
-            "Reimagine the feeling of a classic sweatshirt. With our cotton sweatshirt, everyday essentials no longer have to be ordinary.",
-          handle: "sweatshirt",
-          weight: 400,
+          description: "Advanced retinol for cell renewal and even skin tone.",
+          handle: "retinol-night-cream",
+          weight: 150,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
-          images: [
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/sweatshirt-vintage-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/sweatshirt-vintage-back.png",
-            },
-          ],
-          options: [
-            {
-              title: "Size",
-              values: ["S", "M", "L", "XL"],
-            },
-          ],
+          options: [{ title: "Size", values: ["30ml", "50ml"] }],
           variants: [
             {
-              title: "S",
-              sku: "SWEATSHIRT-S",
-              options: {
-                Size: "S",
-              },
+              title: "30ml",
+              sku: "RETINOL-30",
+              options: { Size: "30ml" },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
+                { amount: 3999, currency_code: "eur" },
+                { amount: 4499, currency_code: "usd" },
               ],
             },
             {
-              title: "M",
-              sku: "SWEATSHIRT-M",
-              options: {
-                Size: "M",
-              },
+              title: "50ml",
+              sku: "RETINOL-50",
+              options: { Size: "50ml" },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "SWEATSHIRT-L",
-              options: {
-                Size: "L",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "SWEATSHIRT-XL",
-              options: {
-                Size: "XL",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
+                { amount: 5999, currency_code: "eur" },
+                { amount: 6499, currency_code: "usd" },
               ],
             },
           ],
-          sales_channels: [
-            {
-              id: defaultSalesChannel.id,
-            },
-          ],
+          sales_channels: [{ id: defaultSalesChannel.id }],
         },
         {
-          title: "Medusa Sweatpants",
+          title: "Collagen Peptides",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Pants")!.id,
+            categoryResult.find((cat) => cat.name === "Skin & Beauty")!.id,
           ],
-          description:
-            "Reimagine the feeling of classic sweatpants. With our cotton sweatpants, everyday essentials no longer have to be ordinary.",
-          handle: "sweatpants",
+          description: "Marine collagen peptides for skin elasticity and joint health.",
+          handle: "collagen-peptides",
           weight: 400,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
-          images: [
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/sweatpants-gray-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/sweatpants-gray-back.png",
-            },
-          ],
-          options: [
-            {
-              title: "Size",
-              values: ["S", "M", "L", "XL"],
-            },
-          ],
+          options: [{ title: "Size", values: ["200g", "400g"] }],
           variants: [
             {
-              title: "S",
-              sku: "SWEATPANTS-S",
-              options: {
-                Size: "S",
-              },
+              title: "200g Powder",
+              sku: "COLLAGEN-200",
+              options: { Size: "200g" },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
+                { amount: 3499, currency_code: "eur" },
+                { amount: 3999, currency_code: "usd" },
               ],
             },
             {
-              title: "M",
-              sku: "SWEATPANTS-M",
-              options: {
-                Size: "M",
-              },
+              title: "400g Powder",
+              sku: "COLLAGEN-400",
+              options: { Size: "400g" },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "SWEATPANTS-L",
-              options: {
-                Size: "L",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "SWEATPANTS-XL",
-              options: {
-                Size: "XL",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
+                { amount: 5999, currency_code: "eur" },
+                { amount: 6499, currency_code: "usd" },
               ],
             },
           ],
-          sales_channels: [
+          sales_channels: [{ id: defaultSalesChannel.id }],
+        },
+        // Vitality & Energy
+        {
+          title: "Vitamin D3 + K2",
+          category_ids: [
+            categoryResult.find((cat) => cat.name === "Vitality & Energy")!.id,
+          ],
+          description: "High-potency vitamin D3 with K2 for bone health and immune support.",
+          handle: "vitamin-d3-k2",
+          weight: 80,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [{ title: "Size", values: ["30 caps", "60 caps"] }],
+          variants: [
             {
-              id: defaultSalesChannel.id,
+              title: "30 Capsules",
+              sku: "VITD3K2-30",
+              options: { Size: "30 caps" },
+              prices: [
+                { amount: 2499, currency_code: "eur" },
+                { amount: 2799, currency_code: "usd" },
+              ],
+            },
+            {
+              title: "60 Capsules",
+              sku: "VITD3K2-60",
+              options: { Size: "60 caps" },
+              prices: [
+                { amount: 3999, currency_code: "eur" },
+                { amount: 4499, currency_code: "usd" },
+              ],
             },
           ],
+          sales_channels: [{ id: defaultSalesChannel.id }],
         },
         {
-          title: "Medusa Shorts",
+          title: "B-Complex Energy Formula",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Merch")!.id,
+            categoryResult.find((cat) => cat.name === "Vitality & Energy")!.id,
           ],
-          description:
-            "Reimagine the feeling of classic shorts. With our cotton shorts, everyday essentials no longer have to be ordinary.",
-          handle: "shorts",
-          weight: 400,
+          description: "Complete B-vitamin complex for sustained energy and mental clarity.",
+          handle: "b-complex-energy",
+          weight: 60,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
-          images: [
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/shorts-vintage-front.png",
-            },
-            {
-              url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/shorts-vintage-back.png",
-            },
-          ],
-          options: [
-            {
-              title: "Size",
-              values: ["S", "M", "L", "XL"],
-            },
-          ],
+          options: [{ title: "Size", values: ["60 caps", "120 caps"] }],
           variants: [
             {
-              title: "S",
-              sku: "SHORTS-S",
-              options: {
-                Size: "S",
-              },
+              title: "60 Capsules",
+              sku: "BCOMPLEX-60",
+              options: { Size: "60 caps" },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
+                { amount: 1899, currency_code: "eur" },
+                { amount: 2199, currency_code: "usd" },
               ],
             },
             {
-              title: "M",
-              sku: "SHORTS-M",
-              options: {
-                Size: "M",
-              },
+              title: "120 Capsules",
+              sku: "BCOMPLEX-120",
+              options: { Size: "120 caps" },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "SHORTS-L",
-              options: {
-                Size: "L",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "SHORTS-XL",
-              options: {
-                Size: "XL",
-              },
-              prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 15,
-                  currency_code: "usd",
-                },
+                { amount: 3299, currency_code: "eur" },
+                { amount: 3699, currency_code: "usd" },
               ],
             },
           ],
-          sales_channels: [
+          sales_channels: [{ id: defaultSalesChannel.id }],
+        },
+        {
+          title: "CoQ10 Ubiquinol",
+          category_ids: [
+            categoryResult.find((cat) => cat.name === "Vitality & Energy")!.id,
+          ],
+          description: "Premium CoQ10 for cellular energy production and heart health.",
+          handle: "coq10-ubiquinol",
+          weight: 70,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [{ title: "Size", values: ["30 softgels", "60 softgels"] }],
+          variants: [
             {
-              id: defaultSalesChannel.id,
+              title: "30 Softgels",
+              sku: "COQ10-30",
+              options: { Size: "30 softgels" },
+              prices: [
+                { amount: 2799, currency_code: "eur" },
+                { amount: 3199, currency_code: "usd" },
+              ],
+            },
+            {
+              title: "60 Softgels",
+              sku: "COQ10-60",
+              options: { Size: "60 softgels" },
+              prices: [
+                { amount: 4999, currency_code: "eur" },
+                { amount: 5499, currency_code: "usd" },
+              ],
             },
           ],
+          sales_channels: [{ id: defaultSalesChannel.id }],
+        },
+        // Longevity & Wellness
+        {
+          title: "Omega-3 Fish Oil",
+          category_ids: [
+            categoryResult.find((cat) => cat.name === "Longevity & Wellness")!.id,
+          ],
+          description: "Ultra-pure omega-3 for heart and brain health.",
+          handle: "omega-3-fish-oil",
+          weight: 200,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [{ title: "Size", values: ["60 softgels", "120 softgels"] }],
+          variants: [
+            {
+              title: "60 Softgels",
+              sku: "OMEGA3-60",
+              options: { Size: "60 softgels" },
+              prices: [
+                { amount: 2299, currency_code: "eur" },
+                { amount: 2599, currency_code: "usd" },
+              ],
+            },
+            {
+              title: "120 Softgels",
+              sku: "OMEGA3-120",
+              options: { Size: "120 softgels" },
+              prices: [
+                { amount: 3999, currency_code: "eur" },
+                { amount: 4499, currency_code: "usd" },
+              ],
+            },
+          ],
+          sales_channels: [{ id: defaultSalesChannel.id }],
+        },
+        {
+          title: "Magnesium Glycinate",
+          category_ids: [
+            categoryResult.find((cat) => cat.name === "Longevity & Wellness")!.id,
+          ],
+          description: "Highly bioavailable magnesium for sleep and muscle recovery.",
+          handle: "magnesium-glycinate",
+          weight: 120,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [{ title: "Size", values: ["60 caps", "120 caps"] }],
+          variants: [
+            {
+              title: "60 Capsules",
+              sku: "MAG-60",
+              options: { Size: "60 caps" },
+              prices: [
+                { amount: 1999, currency_code: "eur" },
+                { amount: 2299, currency_code: "usd" },
+              ],
+            },
+            {
+              title: "120 Capsules",
+              sku: "MAG-120",
+              options: { Size: "120 caps" },
+              prices: [
+                { amount: 3499, currency_code: "eur" },
+                { amount: 3999, currency_code: "usd" },
+              ],
+            },
+          ],
+          sales_channels: [{ id: defaultSalesChannel.id }],
+        },
+        {
+          title: "NMN Longevity Complex",
+          category_ids: [
+            categoryResult.find((cat) => cat.name === "Longevity & Wellness")!.id,
+          ],
+          description: "Nicotinamide mononucleotide for cellular repair and healthy aging.",
+          handle: "nmn-longevity-complex",
+          weight: 60,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [{ title: "Size", values: ["30 caps", "60 caps"] }],
+          variants: [
+            {
+              title: "30 Capsules",
+              sku: "NMN-30",
+              options: { Size: "30 caps" },
+              prices: [
+                { amount: 4999, currency_code: "eur" },
+                { amount: 5499, currency_code: "usd" },
+              ],
+            },
+            {
+              title: "60 Capsules",
+              sku: "NMN-60",
+              options: { Size: "60 caps" },
+              prices: [
+                { amount: 8999, currency_code: "eur" },
+                { amount: 9999, currency_code: "usd" },
+              ],
+            },
+          ],
+          sales_channels: [{ id: defaultSalesChannel.id }],
         },
       ],
     },

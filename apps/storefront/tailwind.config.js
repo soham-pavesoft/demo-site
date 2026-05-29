@@ -46,6 +46,10 @@ module.exports = {
           900: "#4c1d95",
         },
         cream: "#FAF7F2",
+        "deep-purple": "#3b2d7b",
+        coral: "#d4775c",
+        "dark-green": "#2d4a3e",
+        "light-pink": "#f5e6e0",
       },
       borderRadius: {
         none: "0px",
@@ -80,6 +84,11 @@ module.exports = {
           "Helvetica Neue",
           "Ubuntu",
           "sans-serif",
+        ],
+        serif: [
+          "Georgia",
+          "Times New Roman",
+          "serif",
         ],
       },
       keyframes: {

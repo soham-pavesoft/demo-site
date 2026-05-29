@@ -56,9 +56,9 @@ npx medusa user -e admin@demo.com -p demodemo 2>&1 | grep -q "User created" && e
 # 6. Start backend, get token, seed products
 echo ""
 echo "🔧 Starting backend to seed products..."
-npx medusa start &
+npx medusa develop &
 BACKEND_PID=$!
-sleep 8
+sleep 12
 
 # Get auth token
 TOKEN=$(curl -s -X POST http://localhost:9000/auth/user/emailpass \
@@ -94,28 +94,15 @@ curl -s -X POST "http://localhost:9000/admin/api-keys/$PK_ID/sales-channels" \
   -H "Content-Type: application/json" \
   -d "{\"add\":[\"$SC\"]}" >/dev/null 2>&1
 
-# Seed demo products
-echo "🛍️  Seeding demo products..."
-products=(
-  '{"title":"Vitamin D3 + K2","handle":"vitamin-d3-k2","description":"High-potency vitamin D3 with K2 for bone health and immune support.","status":"published","options":[{"title":"Size","values":["30 caps","60 caps"]}],"variants":[{"title":"30 Capsules","prices":[{"amount":2499,"currency_code":"eur"}],"options":{"Size":"30 caps"},"manage_inventory":false},{"title":"60 Capsules","prices":[{"amount":3999,"currency_code":"eur"}],"options":{"Size":"60 caps"},"manage_inventory":false}],"sales_channels":[{"id":"'"$SC"'"}]}'
-  '{"title":"Collagen Peptides","handle":"collagen-peptides","description":"Marine collagen peptides for skin elasticity and joint health.","status":"published","options":[{"title":"Size","values":["200g","400g"]}],"variants":[{"title":"200g Powder","prices":[{"amount":3499,"currency_code":"eur"}],"options":{"Size":"200g"},"manage_inventory":false},{"title":"400g Powder","prices":[{"amount":5999,"currency_code":"eur"}],"options":{"Size":"400g"},"manage_inventory":false}],"sales_channels":[{"id":"'"$SC"'"}]}'
-  '{"title":"Magnesium Glycinate","handle":"magnesium-glycinate","description":"Highly bioavailable magnesium for sleep and muscle recovery.","status":"published","options":[{"title":"Size","values":["60 caps","120 caps"]}],"variants":[{"title":"60 Capsules","prices":[{"amount":1999,"currency_code":"eur"}],"options":{"Size":"60 caps"},"manage_inventory":false},{"title":"120 Capsules","prices":[{"amount":3499,"currency_code":"eur"}],"options":{"Size":"120 caps"},"manage_inventory":false}],"sales_channels":[{"id":"'"$SC"'"}]}'
-  '{"title":"Hyaluronic Acid Serum","handle":"hyaluronic-acid-serum","description":"Deep hydration serum for plump, glowing skin.","status":"published","options":[{"title":"Size","values":["30ml","50ml"]}],"variants":[{"title":"30ml","prices":[{"amount":2999,"currency_code":"eur"}],"options":{"Size":"30ml"},"manage_inventory":false},{"title":"50ml","prices":[{"amount":4499,"currency_code":"eur"}],"options":{"Size":"50ml"},"manage_inventory":false}],"sales_channels":[{"id":"'"$SC"'"}]}'
-  '{"title":"Omega-3 Fish Oil","handle":"omega-3-fish-oil","description":"Ultra-pure omega-3 for heart and brain health.","status":"published","options":[{"title":"Size","values":["60 softgels","120 softgels"]}],"variants":[{"title":"60 Softgels","prices":[{"amount":2299,"currency_code":"eur"}],"options":{"Size":"60 softgels"},"manage_inventory":false},{"title":"120 Softgels","prices":[{"amount":3999,"currency_code":"eur"}],"options":{"Size":"120 softgels"},"manage_inventory":false}],"sales_channels":[{"id":"'"$SC"'"}]}'
-  '{"title":"Retinol Night Cream","handle":"retinol-night-cream","description":"Advanced retinol for cell renewal and even skin tone.","status":"published","options":[{"title":"Size","values":["30ml","50ml"]}],"variants":[{"title":"30ml","prices":[{"amount":3999,"currency_code":"eur"}],"options":{"Size":"30ml"},"manage_inventory":false},{"title":"50ml","prices":[{"amount":5999,"currency_code":"eur"}],"options":{"Size":"50ml"},"manage_inventory":false}],"sales_channels":[{"id":"'"$SC"'"}]}'
-)
-
-for product in "${products[@]}"; do
-  curl -s -X POST http://localhost:9000/admin/products \
-    -H "Authorization: Bearer $TOKEN" \
-    -H "Content-Type: application/json" \
-    -d "$product" >/dev/null 2>&1
-done
-echo "✅ 6 demo products created"
+# Seed demo products are now handled by db:migrate seed script with category assignments
+echo "✅ Products seeded via migration (with categories)"
 
 # Stop the temporary backend
 kill $BACKEND_PID 2>/dev/null
 wait $BACKEND_PID 2>/dev/null
+# Kill any remaining processes on port 9000
+lsof -ti:9000 | xargs kill -9 2>/dev/null || true
+sleep 2
 
 # 7. Setup storefront env
 cd "$ROOT_DIR"

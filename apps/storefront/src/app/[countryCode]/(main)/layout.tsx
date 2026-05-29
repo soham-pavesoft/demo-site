@@ -14,15 +14,21 @@ export const metadata: Metadata = {
 }
 
 export default async function PageLayout(props: { children: React.ReactNode }) {
-  const customer = await retrieveCustomer()
-  const cart = await retrieveCart()
+  let customer = null
+  let cart = null
   let shippingOptions: StoreCartShippingOption[] = []
 
-  if (cart) {
-    const { shipping_options } = await listCartOptions()
+  try {
+    customer = await retrieveCustomer()
+  } catch {}
 
-    shippingOptions = shipping_options
-  }
+  try {
+    cart = await retrieveCart()
+    if (cart) {
+      const { shipping_options } = await listCartOptions()
+      shippingOptions = shipping_options
+    }
+  } catch {}
 
   return (
     <>
