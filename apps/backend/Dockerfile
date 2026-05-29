@@ -16,4 +16,4 @@ RUN cd apps/backend && pnpm run build
 
 WORKDIR /app/apps/backend/.medusa/server
 
-CMD ["sh", "-c", "npx medusa db:migrate && npx medusa start"]
+CMD ["sh", "-c", "npx medusa db:migrate || true && npx medusa start"]
