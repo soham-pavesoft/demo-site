@@ -1,4 +1,4 @@
-import { loadEnv, defineConfig, Modules } from '@medusajs/framework/utils'
+import { loadEnv, defineConfig } from '@medusajs/framework/utils'
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
@@ -10,7 +10,7 @@ module.exports = defineConfig({
   modules: [
     {
       resolve: "@medusajs/file-local",
-      key: Modules.FILE,
+      key: "file",
       options: {
         backend_url: `${process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"}/static`,
       },
