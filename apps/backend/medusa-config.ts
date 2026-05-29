@@ -9,10 +9,18 @@ module.exports = defineConfig({
   },
   modules: [
     {
-      resolve: "@medusajs/file-local",
+      resolve: "@medusajs/medusa/file",
       key: "file",
       options: {
-        backend_url: `${process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"}/static`,
+        providers: [
+          {
+            resolve: "@medusajs/file-local",
+            id: "local",
+            options: {
+              backend_url: `${process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"}/static`,
+            },
+          },
+        ],
       },
     },
   ],
