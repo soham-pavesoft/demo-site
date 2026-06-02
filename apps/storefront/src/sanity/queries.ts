@@ -5,7 +5,11 @@ export async function getHeroBanners() {
 }
 
 export async function getBlogPosts() {
-  return client.fetch(`*[_type == "blogPost"] | order(publishedAt desc)[0...6]`)
+  return client.fetch(`*[_type == "blogPost"] | order(publishedAt desc)[0...6]{_id, title, slug, excerpt, image, publishedAt}`)
+}
+
+export async function getBlogPost(slug: string) {
+  return client.fetch(`*[_type == "blogPost" && slug.current == $slug][0]`, { slug })
 }
 
 export async function getRoarmdSections() {

@@ -14,10 +14,10 @@ const fallbackPage = {
 }
 
 const fallbackSections = [
-  { _id: "1", title: "Science-Backed Formulations", subtitle: "Every product is developed with peer-reviewed research and clinical-grade ingredients.", icon: "🔬", image: null, body: null },
-  { _id: "2", title: "Transparent Sourcing", subtitle: "We trace every ingredient back to its origin. No fillers, no mystery blends.", icon: "🌿", image: null, body: null },
-  { _id: "3", title: "Third-Party Tested", subtitle: "Independent labs verify purity, potency, and safety of every batch we produce.", icon: "✅", image: null, body: null },
-  { _id: "4", title: "Sustainable Packaging", subtitle: "Eco-conscious packaging that reduces waste without compromising product integrity.", icon: "♻️", image: null, body: null },
+  { _id: "1", title: "Science-Backed Formulations", subtitle: "Every product is developed with peer-reviewed research and clinical-grade ingredients.", image: null },
+  { _id: "2", title: "Transparent Sourcing", subtitle: "We trace every ingredient back to its origin. No fillers, no mystery blends.", image: null },
+  { _id: "3", title: "Third-Party Tested", subtitle: "Independent labs verify purity, potency, and safety of every batch we produce.", image: null },
+  { _id: "4", title: "Sustainable Packaging", subtitle: "Eco-conscious packaging that reduces waste without compromising product integrity.", image: null },
 ]
 
 export default async function RoarMDAdvantagePage({ params }: { params: Promise<{ countryCode: string }> }) {
@@ -65,7 +65,7 @@ export default async function RoarMDAdvantagePage({ params }: { params: Promise<
                   className="w-full h-40 object-cover rounded-rounded mb-6"
                 />
               ) : (
-                <div className="text-4xl mb-4">{section.icon || "✨"}</div>
+                <div className="w-10 h-10 rounded-full bg-deep-purple/10 mb-4" />
               )}
               <h3 className="text-xl font-bold text-deep-purple mb-2">{section.title}</h3>
               {section.subtitle && <p className="text-grey-50 text-sm">{section.subtitle}</p>}
