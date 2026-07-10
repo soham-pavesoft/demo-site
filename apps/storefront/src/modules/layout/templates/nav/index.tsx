@@ -33,7 +33,6 @@ export default async function Nav() {
             <LocalizedClientLink href="/store" className="hover:text-black transition-colors">Products</LocalizedClientLink>
             <LocalizedClientLink href="/discover" className="hover:text-black transition-colors">Discover</LocalizedClientLink>
             <LocalizedClientLink href="/roarmd-advantage" className="hover:text-black transition-colors">The Advantage</LocalizedClientLink>
-            <LocalizedClientLink href="/store" className="hover:text-black transition-colors">About Us</LocalizedClientLink>
           </div>
 
           <div className="flex items-center gap-x-4">

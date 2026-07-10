@@ -33,7 +33,6 @@ export default async function Footer() {
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-white/60">
               <li><LocalizedClientLink href="/store" className="hover:text-white transition-colors">The Advantage</LocalizedClientLink></li>
-              <li><LocalizedClientLink href="/store" className="hover:text-white transition-colors">About Us</LocalizedClientLink></li>
               <li><LocalizedClientLink href="/store" className="hover:text-white transition-colors">FAQ</LocalizedClientLink></li>
             </ul>
           </div>
