@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 
 const chips = [
   "Concierge Care at No Cost",
@@ -48,7 +49,15 @@ const AdvantageSection = () => {
         {/* Right placeholder */}
         <div className="w-full small:w-1/2 flex items-center justify-center">
           <div className="relative">
-            <div className="w-72 h-96 bg-grey-30 rounded-2xl" />
+            <div className="relative w-72 h-96 bg-grey-30 rounded-2xl overflow-hidden">
+              <Image
+                src="/night-cream.png"
+                alt="The Acme Wellness Advantage"
+                fill
+                className="object-cover"
+                sizes="288px"
+              />
+            </div>
             <div className="absolute bottom-8 right-0 bg-white rounded-xl px-6 py-4 shadow-lg max-w-[200px]">
               <p className="text-sm font-medium text-grey-90 text-center">
                 Personalized service with compassionate care.

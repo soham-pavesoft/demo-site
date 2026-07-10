@@ -1,12 +1,18 @@
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import Image from "next/image"
 
 const AICompanion = () => {
   return (
     <section className="bg-deep-purple py-20">
       <div className="content-container flex flex-col small:flex-row items-center gap-12">
-        {/* Placeholder for video/image */}
-        <div className="w-full small:w-1/2 bg-white/10 rounded-2xl h-72 flex items-center justify-center">
-          <span className="text-white/40 text-sm">AI Companion Preview</span>
+        <div className="relative w-full small:w-1/2 bg-white/10 rounded-2xl h-72 overflow-hidden">
+          <Image
+            src="/serum.png"
+            alt="AI Wellness Companion"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
         </div>
 
         {/* Text content */}

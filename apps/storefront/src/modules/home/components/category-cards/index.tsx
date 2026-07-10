@@ -1,4 +1,5 @@
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import Image from "next/image"
 
 const categories = [
   {
@@ -6,18 +7,21 @@ const categories = [
     handle: "skin-beauty",
     description: "Premium skincare formulations designed to restore radiance and help you look as good as you feel.",
     color: "bg-deep-purple",
+    image: "/skin-radiance.png",
   },
   {
     title: "Vitality & Energy",
     handle: "vitality-energy",
     description: "Science-backed supplements to boost your energy, support metabolism, and keep you thriving daily.",
     color: "bg-coral",
+    image: "/coQ.png",
   },
   {
     title: "Longevity & Wellness",
     handle: "longevity-wellness",
     description: "Targeted nutrition designed to support long-term health, stronger bones, and a sharper mind.",
     color: "bg-dark-green",
+    image: "/nmn.png",
   },
 ]
 
@@ -35,9 +39,14 @@ const CategoryCards = () => {
         <div className="grid grid-cols-1 small:grid-cols-3 gap-6">
           {categories.map((cat, i) => (
             <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm">
-              {/* Placeholder image area */}
-              <div className="h-48 bg-grey-10 flex items-center justify-center">
-                <span className="text-grey-40 text-sm">Product Image</span>
+              <div className="relative h-48 bg-grey-10">
+                <Image
+                  src={cat.image}
+                  alt={cat.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-serif font-bold italic text-grey-90 mb-3">{cat.title}</h3>
