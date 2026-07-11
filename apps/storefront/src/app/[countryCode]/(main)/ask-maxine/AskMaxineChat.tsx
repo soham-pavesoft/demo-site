@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { FiArrowUp } from "react-icons/fi"
+import MaxineMarkdown from "./MaxineMarkdown"
 import ProductCarousel, { MaxineProduct } from "./ProductCarousel"
 
 const MaxineAvatar = () => (
@@ -97,8 +98,8 @@ const AskMaxineChat = ({
                 ) : (
                   <div key={message.id} className="flex gap-3">
                     <MaxineAvatar />
-                    <div className="max-w-[80%] bg-white border border-grey-20 text-grey-90 rounded-2xl rounded-bl-md px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-sm">
-                      {messageText(message.parts)}
+                    <div className="max-w-[80%] bg-white border border-grey-20 text-grey-90 rounded-2xl rounded-bl-md px-5 py-3 text-sm leading-relaxed shadow-sm">
+                      <MaxineMarkdown text={messageText(message.parts)} />
                     </div>
                   </div>
                 )
