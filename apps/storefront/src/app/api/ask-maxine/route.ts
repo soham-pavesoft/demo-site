@@ -5,6 +5,7 @@ import {
   createUIMessageStreamResponse,
   streamText,
   UIMessage,
+  UIMessageStreamWriter,
 } from "ai"
 import { listProducts } from "@lib/data/products"
 import { getProductPrice } from "@lib/util/get-product-price"
@@ -73,19 +74,23 @@ const demoReply = (userText: string, catalog: CatalogItem[]): string => {
   return `Thank you for sharing that with me. I want to make sure we explore this thoroughly and give you the most personalized guidance possible. Could you tell me a bit more about when you first noticed this, and whether it's been affecting your sleep or energy levels? That context helps me a great deal.`
 }
 
+// Stream a canned reply word by word so it feels like a live model response.
+const writeDemoText = async (writer: UIMessageStreamWriter, reply: string) => {
+  const id = "maxine-demo"
+  writer.write({ type: "text-start", id })
+  for (const word of reply.split(/(?<=\s)/)) {
+    writer.write({ type: "text-delta", id, delta: word })
+    await new Promise((resolve) => setTimeout(resolve, 30))
+  }
+  writer.write({ type: "text-end", id })
+  writer.write({ type: "finish" })
+}
+
 const streamDemoReply = (reply: string) => {
   const stream = createUIMessageStream({
     execute: async ({ writer }) => {
-      const id = "maxine-demo"
       writer.write({ type: "start" })
-      writer.write({ type: "text-start", id })
-      // Stream word by word so the demo feels like a live model response.
-      for (const word of reply.split(/(?<=\s)/)) {
-        writer.write({ type: "text-delta", id, delta: word })
-        await new Promise((resolve) => setTimeout(resolve, 30))
-      }
-      writer.write({ type: "text-end", id })
-      writer.write({ type: "finish" })
+      await writeDemoText(writer, reply)
     },
   })
   return createUIMessageStreamResponse({
@@ -110,17 +115,18 @@ export async function POST(req: Request) {
 
   const catalog = await loadCatalog(countryCode)
 
+  const lastUser = [...messages].reverse().find((m) => m.role === "user")
+  const lastText = (lastUser?.parts ?? [])
+    .filter((part) => part.type === "text")
+    .map((part) => part.text)
+    .join(" ")
+
   // Demo mode: no API key configured (or explicitly forced). Streams canned
   // Maxine replies so the page is fully demoable without Claude access.
   const demoMode =
     !process.env.ANTHROPIC_API_KEY || process.env.MAXINE_DEMO_MODE === "true"
 
   if (demoMode) {
-    const lastUser = [...messages].reverse().find((m) => m.role === "user")
-    const lastText = (lastUser?.parts ?? [])
-      .filter((part) => part.type === "text")
-      .map((part) => part.text)
-      .join(" ")
     return streamDemoReply(demoReply(lastText, catalog))
   }
 
@@ -140,24 +146,47 @@ export async function POST(req: Request) {
       system,
       messages: await convertToModelMessages(messages),
       onError: ({ error }) => {
-        // Mid-stream model/network failures land here; the client gets an
-        // error part via onError below.
         console.error("[ask-maxine] stream error:", error)
       },
     })
 
-    return result.toUIMessageStreamResponse({
+    const liveStream = result.toUIMessageStream({
       onError: (error) => {
         console.error("[ask-maxine] response error:", error)
         return "Maxine is having trouble responding right now."
       },
     })
+
+    // Forward the live stream, but if Claude fails before producing any text
+    // (invalid key, no credits, rate limit, model error), swap in a demo
+    // reply instead of surfacing an error to the shopper.
+    const stream = createUIMessageStream({
+      execute: async ({ writer }) => {
+        const reader = liveStream.getReader()
+        let sawText = false
+        let started = false
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          if (value.type === "error" && !sawText) {
+            console.error(
+              "[ask-maxine] live call failed before output; falling back to demo reply"
+            )
+            if (!started) writer.write({ type: "start" })
+            await writeDemoText(writer, demoReply(lastText, catalog))
+            return
+          }
+          if (value.type === "start") started = true
+          if (value.type === "text-delta") sawText = true
+          writer.write(value)
+        }
+      },
+    })
+
+    return createUIMessageStreamResponse({ stream })
   } catch (e) {
-    // Errors thrown before streaming starts (bad model id, auth failure, etc.)
-    console.error("[ask-maxine] request failed:", e)
-    return Response.json(
-      { error: "Maxine is having trouble responding right now." },
-      { status: 500 }
-    )
+    // Errors thrown before streaming starts — still answer with a demo reply.
+    console.error("[ask-maxine] request failed; falling back to demo reply:", e)
+    return streamDemoReply(demoReply(lastText, catalog))
   }
 }

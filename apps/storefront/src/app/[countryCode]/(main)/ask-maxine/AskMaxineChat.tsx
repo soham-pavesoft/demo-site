@@ -22,7 +22,7 @@ const AskMaxineChat = ({
   const [input, setInput] = useState("")
   const [showCarousel, setShowCarousel] = useState(false)
   const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
 
   const { messages, sendMessage, status, error, regenerate } = useChat({
     transport: new DefaultChatTransport({
@@ -34,7 +34,10 @@ const AskMaxineChat = ({
   const busy = status === "submitted" || status === "streaming"
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+    // Scroll only the message list, never the page (scrollIntoView would
+    // also scroll the document and drag the footer into view).
+    const el = listRef.current
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })
   }, [messages, status])
 
   useEffect(() => {
@@ -70,7 +73,7 @@ const AskMaxineChat = ({
   return (
     <div className="bg-cream flex flex-col h-[calc(100vh-4rem)]">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto">
+      <div ref={listRef} className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto w-full px-6 py-10">
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center pt-24">
@@ -129,7 +132,6 @@ const AskMaxineChat = ({
               )}
             </div>
           )}
-          <div ref={bottomRef} />
         </div>
       </div>
 
