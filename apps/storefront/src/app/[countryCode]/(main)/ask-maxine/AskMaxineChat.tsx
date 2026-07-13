@@ -13,6 +13,19 @@ const MaxineAvatar = () => (
   </div>
 )
 
+const SUGGESTED_PROMPTS = [
+  "I've been feeling low on energy lately — what would help?",
+  "What's a good routine for better sleep?",
+  "Which products are best for stress relief?",
+]
+
+const matchProducts = (text: string, products: MaxineProduct[]) => {
+  const lower = text.toLowerCase()
+  return products.filter(
+    (product) => product.title && lower.includes(product.title.toLowerCase())
+  )
+}
+
 const AskMaxineChat = ({
   products,
   countryCode,
@@ -33,6 +46,7 @@ const AskMaxineChat = ({
   })
 
   const busy = status === "submitted" || status === "streaming"
+  const hasStarted = messages.length > 0
 
   useEffect(() => {
     // Scroll only the message list, never the page (scrollIntoView would
@@ -57,12 +71,15 @@ const AskMaxineChat = ({
     hideTimeout.current = setTimeout(() => setShowCarousel(false), 250)
   }
 
+  const submitText = (text: string) => {
+    if (!text.trim() || busy) return
+    sendMessage({ text: text.trim() })
+    setInput("")
+  }
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    const text = input.trim()
-    if (!text || busy) return
-    sendMessage({ text })
-    setInput("")
+    submitText(input)
   }
 
   const messageText = (parts: (typeof messages)[number]["parts"]) =>
@@ -76,8 +93,8 @@ const AskMaxineChat = ({
       {/* Messages */}
       <div ref={listRef} className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto w-full px-6 py-10">
-          {messages.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center pt-24">
+          {!hasStarted ? (
+            <div className="flex flex-col items-center text-center pt-16">
               <h1 className="text-4xl md:text-5xl font-serif italic text-grey-90">
                 Ask Maxine <span className="text-coral">anything</span>
               </h1>
@@ -85,25 +102,58 @@ const AskMaxineChat = ({
                 Your personal wellness guide. Ask about sleep, energy,
                 hormones, or which of our products fits your routine.
               </p>
+
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+                {SUGGESTED_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    onClick={() => submitText(prompt)}
+                    className="text-left bg-white border border-grey-20 rounded-2xl px-5 py-4 text-sm text-grey-90 shadow-sm hover:ring-2 hover:ring-deep-purple/30 transition-all"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+
+              {products.length > 0 && (
+                <div className="mt-8 w-full">
+                  <ProductCarousel products={products} />
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex flex-col gap-6">
-              {messages.map((message) =>
-                message.role === "user" ? (
-                  <div key={message.id} className="flex justify-end">
-                    <div className="max-w-[80%] bg-deep-purple text-white rounded-2xl rounded-br-md px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap">
-                      {messageText(message.parts)}
+              {messages.map((message) => {
+                if (message.role === "user") {
+                  return (
+                    <div key={message.id} className="flex justify-end">
+                      <div className="max-w-[80%] bg-deep-purple text-white rounded-2xl rounded-br-md px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap">
+                        {messageText(message.parts)}
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div key={message.id} className="flex gap-3">
-                    <MaxineAvatar />
-                    <div className="max-w-[80%] bg-white border border-grey-20 text-grey-90 rounded-2xl rounded-bl-md px-5 py-3 text-sm leading-relaxed shadow-sm">
-                      <MaxineMarkdown text={messageText(message.parts)} />
+                  )
+                }
+
+                const text = messageText(message.parts)
+                const mentioned = matchProducts(text, products)
+
+                return (
+                  <div key={message.id} className="flex flex-col gap-3">
+                    <div className="flex gap-3">
+                      <MaxineAvatar />
+                      <div className="max-w-[80%] bg-white border border-grey-20 text-grey-90 rounded-2xl rounded-bl-md px-5 py-3 text-sm leading-relaxed shadow-sm">
+                        <MaxineMarkdown text={text} />
+                      </div>
                     </div>
+                    {mentioned.length > 0 && (
+                      <div className="pl-11">
+                        <ProductCarousel products={mentioned} />
+                      </div>
+                    )}
                   </div>
                 )
-              )}
+              })}
               {status === "submitted" && (
                 <div className="flex gap-3">
                   <MaxineAvatar />
@@ -143,7 +193,9 @@ const AskMaxineChat = ({
           onMouseEnter={revealCarousel}
           onMouseLeave={concealCarousel}
         >
-          {products.length > 0 && (
+          {/* Once the conversation has started, the catalog moves from being
+              always visible to a hover-reveal above the composer. */}
+          {hasStarted && products.length > 0 && (
             <div
               className={`absolute bottom-full inset-x-0 mb-4 transition-all duration-200 ${
                 showCarousel
