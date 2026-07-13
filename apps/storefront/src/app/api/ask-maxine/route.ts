@@ -23,10 +23,13 @@ type CatalogItem = { title: string; price: string | null; handle: string }
 
 const loadCatalog = async (countryCode?: string): Promise<CatalogItem[]> => {
   try {
+    // Keep this limit in sync with the product fetch in page.tsx — both must
+    // see the same product set so Maxine never mentions a product that isn't
+    // in the client's list (which powers the inline product cards).
     const { response } = await listProducts({
       countryCode:
         countryCode || process.env.NEXT_PUBLIC_DEFAULT_REGION || "us",
-      queryParams: { limit: 12 },
+      queryParams: { limit: 24 },
     })
     return response.products.map((product) => {
       const { cheapestPrice } = getProductPrice({ product })

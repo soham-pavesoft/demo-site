@@ -92,32 +92,34 @@ const AskMaxineChat = ({
     <div className="bg-cream flex flex-col h-[calc(100vh-4rem)]">
       {/* Messages */}
       <div ref={listRef} className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto w-full px-6 py-10">
+        <div className="max-w-3xl mx-auto w-full h-full px-6 py-10">
           {!hasStarted ? (
-            <div className="flex flex-col items-center text-center pt-16">
-              <h1 className="text-4xl md:text-5xl font-serif italic text-grey-90">
-                Ask Maxine <span className="text-coral">anything</span>
-              </h1>
-              <p className="mt-4 text-grey-60 max-w-md">
-                Your personal wellness guide. Ask about sleep, energy,
-                hormones, or which of our products fits your routine.
-              </p>
+            <div className="h-full flex flex-col justify-between items-center text-center">
+              <div className="flex flex-col items-center pt-6">
+                <h1 className="text-4xl md:text-5xl font-serif italic text-grey-90">
+                  Ask Maxine <span className="text-coral">anything</span>
+                </h1>
+                <p className="mt-4 text-grey-60 max-w-md">
+                  Your personal wellness guide. Ask about sleep, energy,
+                  hormones, or which of our products fits your routine.
+                </p>
 
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
-                {SUGGESTED_PROMPTS.map((prompt) => (
-                  <button
-                    key={prompt}
-                    type="button"
-                    onClick={() => submitText(prompt)}
-                    className="text-left bg-white border border-grey-20 rounded-2xl px-5 py-4 text-sm text-grey-90 shadow-sm hover:ring-2 hover:ring-deep-purple/30 transition-all"
-                  >
-                    {prompt}
-                  </button>
-                ))}
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+                  {SUGGESTED_PROMPTS.map((prompt) => (
+                    <button
+                      key={prompt}
+                      type="button"
+                      onClick={() => submitText(prompt)}
+                      className="text-left bg-white border border-grey-20 rounded-2xl px-5 py-4 text-sm text-grey-90 shadow-sm hover:ring-2 hover:ring-deep-purple/30 transition-all"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {products.length > 0 && (
-                <div className="mt-8 w-full">
+                <div className="w-full">
                   <ProductCarousel products={products} />
                 </div>
               )}

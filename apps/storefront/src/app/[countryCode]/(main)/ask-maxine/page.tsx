@@ -19,9 +19,12 @@ export default async function AskMaxinePage({
 
   let products: MaxineProduct[] = []
   try {
+    // Keep this in sync with the catalog limit in the /api/ask-maxine route —
+    // both must see the same product set so Maxine never mentions a product
+    // that isn't in the client's list (which powers the inline product cards).
     const { response } = await listProducts({
       countryCode,
-      queryParams: { limit: 8 },
+      queryParams: { limit: 24 },
     })
     products = response.products.map((product) => {
       const { cheapestPrice } = getProductPrice({ product })
